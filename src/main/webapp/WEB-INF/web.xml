@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>uploads.directory</param-name>
+        <!-- Tomcat must have write permissions on this folder -->
+        <param-value>D:/Didattica/teaching_workspace</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Hello</servlet-name>
+        <servlet-class>it.univaq.f4i.iw.examples.Uploadami</servlet-class>
+        <multipart-config>
+            <!-- temporary files location (DEF: "") -->
+            <!-- <location>/tmp</location>  -->
+            <!-- max size of accepted upload (DEF: unlimited!) -->
+            <max-file-size>20848820</max-file-size>
+            <!-- max size of multipart requests (may contain more files or data) (DEF: ulimited!) -->
+            <max-request-size>418018841</max-request-size>
+            <!-- max size of files to hold in memory (without writing to temporary disk file) (DEF: 0) -->
+            <!-- <file-size-threshold>1048576</file-size-threshold>  -->
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Hello</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>upload</welcome-file>
+    </welcome-file-list>
+</web-app>
