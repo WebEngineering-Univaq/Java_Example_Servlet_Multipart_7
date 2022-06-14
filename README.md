@@ -1,4 +1,4 @@
-# Esempio_Servlet_Multipart_7_Maven
+#  Java_Example_Servlet_Multipart_7
 > Multipart request decoding with Java servlets 
  
 Shows the usage of classes HTTPServletRequest and Part to handle multipart requests with file uploads
@@ -15,4 +15,4 @@ This is a Maven-based project. Simply download the code and open it in any Maven
 
 ---
 
-![University od L'Aquila](https://www.disim.univaq.it/skins/aqua/img/logo2021-2.png)
+![University of L'Aquila](https://www.disim.univaq.it/skins/aqua/img/logo2021-2.png)
