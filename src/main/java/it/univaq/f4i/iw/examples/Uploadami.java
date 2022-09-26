@@ -4,12 +4,15 @@ import it.univaq.f4i.iw.framework.result.HTMLResult;
 import it.univaq.f4i.iw.framework.security.SecurityHelpers;
 import it.univaq.f4i.iw.framework.utils.ServletHelpers;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +29,6 @@ import javax.servlet.http.Part;
  *
  */
 public class Uploadami extends HttpServlet {
-
-   
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HTMLResult result = new HTMLResult(getServletContext());
@@ -63,8 +64,18 @@ public class Uploadami extends HttpServlet {
                 while (Files.exists(target, LinkOption.NOFOLLOW_LINKS)) {
                     target = Paths.get(getServletContext().getInitParameter("uploads.directory") + File.separatorChar + (++guess) + "_" + name);
                 }
-                //doo NOT call the write method. Paths passed to this method are relative to the (temp) location indicated in the multipartconfig!
+                //or, to create a completely new filename without extension, you can use
+                //target = File.createTempFile("upload_", "", new File(getServletContext().getInitParameter("uploads.directory"))).toPath();
+
+                //if you call the Part.write method, remember that paths passed to this method are relative to the (temp) location indicated in the multipartconfig
                 Files.copy(p.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING); //nio utility. Otherwise, use a buffer and copy from inputstream to fileoutputstream
+
+                //read the file back (just to check...)
+                byte[] buffer = new byte[10];
+                int read = 0;
+                try ( InputStream is = new FileInputStream(target.toFile())) {
+                    read = is.read(buffer);
+                }
 
                 HTMLResult result = new HTMLResult(getServletContext());
                 result.setTitle("Upload successful!");
@@ -73,6 +84,7 @@ public class Uploadami extends HttpServlet {
                 result.appendToBody("<p><strong>Uploaded file size:</strong> " + size + "</p>");
                 result.appendToBody("<p><strong>Description:</strong> " + HTMLResult.sanitizeHTMLOutput(d) + "</p>");
                 result.appendToBody("<p><strong>Local file:</strong> " + HTMLResult.sanitizeHTMLOutput(target.toString()) + "</p>");
+                result.appendToBody("<p><strong>First " + read + " file bytes:</strong> " + HTMLResult.sanitizeHTMLOutput(Arrays.toString(buffer)) + "</p>");
                 result.activate(request, response);
             } else {
                 ServletHelpers.handleError("File truncated", request, response, getServletContext());
@@ -98,7 +110,7 @@ public class Uploadami extends HttpServlet {
                 }
             } else {
                 action_default(request, response);
-            }            
+            }
         } catch (Exception ex) {
             request.setAttribute("exception", ex);
             ServletHelpers.handleError(request, response, getServletContext());
