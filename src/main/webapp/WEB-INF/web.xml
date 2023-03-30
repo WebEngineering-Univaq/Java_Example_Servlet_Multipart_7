@@ -3,7 +3,7 @@
     <context-param>
         <param-name>uploads.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
-        <param-value>D:/Didattica/teaching_workspace</param-value>
+        <param-value>C:/Users/Didattica/Documents/teaching_workspace_local</param-value>
     </context-param>
     <servlet>
         <servlet-name>Hello</servlet-name>

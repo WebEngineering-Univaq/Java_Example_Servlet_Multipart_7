@@ -53,7 +53,7 @@ public class Uploadami extends HttpServlet {
             String name = p.getSubmittedFileName(); //filename should be sanitized
             String contentType = p.getContentType();
             long size = p.getSize();
-            if (size > 0 && name != null && !name.isEmpty()) {
+            if (size > 0 && name != null && !name.isBlank()) {
                 //sanitize filename
                 name = SecurityHelpers.sanitizeFilename(name);
                 //Path target = Paths.get(getServletContext().getRealPath("") + File.separatorChar + "uploads" + File.separatorChar + name);
