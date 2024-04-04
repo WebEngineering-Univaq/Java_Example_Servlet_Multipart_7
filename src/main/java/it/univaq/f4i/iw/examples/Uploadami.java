@@ -68,12 +68,13 @@ public class Uploadami extends HttpServlet {
                 //target = File.createTempFile("upload_", "", new File(getServletContext().getInitParameter("uploads.directory"))).toPath();
 
                 //if you call the Part.write method, remember that paths passed to this method are relative to the (temp) location indicated in the multipartconfig
-                Files.copy(p.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING); //nio utility. Otherwise, use a buffer and copy from inputstream to fileoutputstream
-
+                try (InputStream temp_upload = p.getInputStream()) {
+                    Files.copy(temp_upload, target, StandardCopyOption.REPLACE_EXISTING); //nio utility. Otherwise, use a buffer and copy from inputstream to fileoutputstream
+                }
                 //read the file back (just to check...)
                 byte[] buffer = new byte[10];
                 int read = 0;
-                try ( InputStream is = new FileInputStream(target.toFile())) {
+                try (InputStream is = new FileInputStream(target.toFile())) {
                     read = is.read(buffer);
                 }
 
